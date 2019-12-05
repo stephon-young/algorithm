@@ -129,9 +129,38 @@ slist_t* slist_combine(slist_t *first, slist_t *second) {
 }
 
 int slist_is_cycle(slist_t *slist) {
+  //快慢指针
+  snode_t *fast = slist->next;
+  snode_t *slow = slist->next;
 
+  while (fast != NULL && slow != NULL) {
+    fast = fast->next;
+    if (fast == NULL)
+      break;
+
+    fast = fast->next;
+    slow = slow->next;
+
+    if (fast == slow)
+      return 1;
+  }
+
+  return 0;
 }
 
 snode_t *slist_middle(slist_t *slist) {
-  
+  //快慢指针
+  snode_t *fast = slist->next;
+  snode_t *slow = slist->next;
+
+  while (fast != NULL && slow != NULL) {
+    fast = fast->next;
+    if (fast == NULL)
+      break;
+
+    fast = fast->next;
+    slow = slow->next;
+  }
+
+  return slow;
 }
