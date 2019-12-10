@@ -23,6 +23,16 @@ void slist_finalize(slist_t *slist) {
   free(slist);
 }
 
+int slist_length(slist_t *list) {
+  snode_t *n = list->next;
+  int count = 0;
+  while (n != NULL) {
+    n = n->next;
+    count++;
+  }
+  return count;
+}
+
 int slist_append(slist_t *slist, data_t data) {
   snode_t *node;
   if ((node = malloc(sizeof(snode_t))) == NULL)
@@ -31,7 +41,7 @@ int slist_append(slist_t *slist, data_t data) {
   node->next = NULL;
   node->data = data;
   
-  snode_t *tail = slist->next;
+  snode_t *tail = slist;
   while (tail->next != NULL)
     tail = tail->next;
 
@@ -44,8 +54,8 @@ int slist_insert(slist_t *slist, int pos, data_t data) {
   if (pos < 1)
     return -1;
 
-  int count = 1;
-  snode_t *n = slist->next;
+  int count = 0;
+  snode_t *n = slist;
   int found = 0;
   while (n->next != NULL) {
     if (count == pos) {
@@ -56,7 +66,7 @@ int slist_insert(slist_t *slist, int pos, data_t data) {
     count++;
   }
 
-  if (!found)
+  if (!found && pos != count + 1)
     return -1;
 
   snode_t *node;
@@ -100,8 +110,39 @@ int slist_remove(slist_t *slist, int pos, data_t *data) {
   return 0;
 }
 
-int slist_locate(slist_t *list, data_t data) {
+int slist_get(slist_t *slist, int pos, data_t *data) {
+  if (pos < 1)
+    return -1;
 
+  snode_t *n = slist->next;
+  
+  int count = 0;
+  while (n != NULL) {
+    count++;
+    if (count == pos) {
+      if (data != NULL)
+        *data = n->data;
+      return 0;
+    }
+
+    n = n->next;
+  }
+
+  return -1;
+}
+
+int slist_locate(slist_t *list, data_t data) {
+  snode_t *n = list->next;
+  int pos = 0;
+  while (n != NULL) {
+    pos++;
+    if (n->data == data)
+      return pos;
+  
+    n = n->next;
+  }
+
+  return 0;
 }
 
 void slist_reverse(slist_t *slist) {
@@ -119,12 +160,24 @@ void slist_reverse(slist_t *slist) {
     first = n;
     n = temp;
   }
+  slist->next = first;
 }
 void slist_sort(slist_t *list, int (*compare)(data_t first, data_t second)) {
 
 }
 
 slist_t* slist_combine(slist_t *first, slist_t *second) {
+  // 合并到first
+  snode_t *p = first->next;
+  snode_t *q = second->next;
+
+  // 
+  second->next = NULL;
+
+  while (p != NULL && q != NULL) {
+    
+  }
+
 
 }
 
